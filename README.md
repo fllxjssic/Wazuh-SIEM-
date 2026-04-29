@@ -2,7 +2,7 @@
 
 Este documento descreve a instalação do Wazuh em ambiente Linux de forma manual e profissional, incluindo arquitetura e opção com Docker.
 
-O :contentReference[oaicite:0]{index=0} é uma solução SIEM utilizada para monitoramento de segurança, detecção de intrusão e análise de logs em tempo real.
+O Wazuh é uma solução SIEM utilizada para monitoramento de segurança, detecção de intrusão e análise de logs em tempo real.
 
 ---
 
