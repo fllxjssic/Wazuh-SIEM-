@@ -1,23 +1,37 @@
-# Instalação do Wazuh em Ambiente Linux
+# Wazuh - Instalação em amabiente Linux
 
-Este documento descreve o passo a passo da instalação do Wazuh em ambiente Linux, utilizado para monitoramento de segurança, análise de logs e detecção de ameaças.
+Este documento descreve a instalação do Wazuh em ambiente Linux de forma manual e profissional, incluindo arquitetura e opção com Docker.
 
-O Wazuh é uma plataforma SIEM open source utilizada para segurança e monitoramento de infraestrutura.
-
----
-
-## 🧰 Pré-requisitos
-
-Antes de iniciar, o servidor deve atender aos seguintes requisitos:
-
-- Sistema Linux 64 bits (Ubuntu recomendado)
-- Mínimo 4GB de RAM (ideal 8GB ou mais)
-- Acesso root ou sudo
-- Conexão com internet
+O :contentReference[oaicite:0]{index=0} é uma solução SIEM utilizada para monitoramento de segurança, detecção de intrusão e análise de logs em tempo real.
 
 ---
 
-## ⚙️ Atualização do sistema
+# 🏗️ Arquitetura da Solução
+
+A solução é composta por:
+
+- Wazuh Server (Manager)
+- Indexador (OpenSearch)
+- Dashboard Web
+- Agentes instalados nos endpoints
+
+Fluxo:
+
+Agente → Wazuh Manager → Indexador → Dashboard
+
+---
+
+# 🧰 Pré-requisitos
+
+- Ubuntu Server 22.04+ ou equivalente
+- Mínimo 8GB RAM (recomendado 16GB)
+- CPU com 4 cores ou mais
+- Acesso root/sudo
+- Acesso à internet
+
+---
+
+# ⚙️ Atualização do sistema
 
 ```bash
 sudo apt update && sudo apt upgrade -y
@@ -25,23 +39,26 @@ sudo apt update && sudo apt upgrade -y
 
 ---
 
-## 📦 Download do instalador
+# 📦 Instalação de dependências
 
 ```bash
-curl -sO https://packages.wazuh.com/4.8/wazuh-install.sh
+sudo apt install curl unzip wget apt-transport-https gnupg -y
 ```
 
 ---
 
-## 🔐 Permissão de execução
+# 🔐 Instalação do Wazuh (modo manual - enterprise)
+
+## 1. Download do instalador
 
 ```bash
+curl -sO https://packages.wazuh.com/4.8/wazuh-install.sh
 chmod +x wazuh-install.sh
 ```
 
 ---
 
-## 🚀 Instalação do Wazuh
+## 2. Instalação completa (modo distribuído simplificado)
 
 ```bash
 sudo ./wazuh-install.sh -a
@@ -49,9 +66,9 @@ sudo ./wazuh-install.sh -a
 
 ---
 
-## 🌐 Acesso ao painel
+# 🌐 Acesso ao Dashboard
 
-Após a instalação, acesse no navegador:
+Após instalação:
 
 ```
 https://IP_DO_SERVIDOR
@@ -59,14 +76,14 @@ https://IP_DO_SERVIDOR
 
 ---
 
-## 🔑 Credenciais iniciais
+# 🔑 Credenciais iniciais
 
 - Usuário: admin  
-- Senha: gerada automaticamente durante a instalação  
+- Senha: gerada automaticamente na instalação  
 
 ---
 
-## 📡 Instalação do agente Linux
+# 🖥️ Instalação do agente Linux
 
 ```bash
 wget https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent.deb
@@ -83,26 +100,69 @@ sudo systemctl start wazuh-agent
 
 ---
 
-## 🧪 Validação da instalação
+# 🧪 Validação
 
-A instalação será considerada concluída quando:
-
-- Dashboard estiver acessível via navegador
-- Agente estiver conectado ao servidor
-- Logs estiverem sendo recebidos corretamente
-
----
-
-## 📊 Conclusão
-
-O Wazuh foi instalado com sucesso e está operacional para monitoramento de segurança e análise de eventos.
+- Dashboard acessível via HTTPS  
+- Agentes conectados  
+- Logs sendo recebidos  
+- Alertas ativos  
 
 ---
 
-## 🚀 Portfólio
+# 🐳 Versão Docker (Lab rápido)
 
-Este projeto faz parte de um laboratório de infraestrutura contendo:
+## Instalação do Docker
+
+```bash
+sudo apt install docker.io docker-compose -y
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+---
+
+## Docker Compose (Wazuh Stack)
+
+```yaml
+version: '3.7'
+
+services:
+  wazuh:
+    image: wazuh/wazuh:latest
+    container_name: wazuh-manager
+    ports:
+      - "1514:1514"
+      - "1515:1515"
+      - "55000:55000"
+```
+
+---
+
+## Subir ambiente
+
+```bash
+docker-compose up -d
+```
+
+---
+
+# 📊 Conclusão
+
+A solução Wazuh foi implantada com sucesso em ambiente Linux, incluindo opção manual e containerizada.
+
+O ambiente está pronto para:
+
+- monitoramento de segurança
+- análise de logs
+- detecção de ameaças
+- integração com infraestrutura corporativa
+
+---
+
+# 🚀 Integração do laboratório
+
+Este projeto faz parte de um ambiente completo de infraestrutura:
 
 - GLPI (ITSM / chamados)
 - Zabbix (monitoramento)
-- Wazuh (segurança / SIEM)
+- Wazuh (segurança SIEM)
